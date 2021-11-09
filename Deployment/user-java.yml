@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-java
+  labels:
+    app: user-java
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-java-pod
+  template:
+    metadata:
+      labels:
+        app: user-java-pod
+    spec:
+      containers:
+      - name: user-java-pod
+        image: registryygo2491.azurecr.io/user-java:latest
+        ports:
+        - containerPort: 80
