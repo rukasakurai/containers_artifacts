@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userprofile
+  labels:
+    app: userprofile
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userprofile-pod
+  template:
+    metadata:
+      labels:
+        app: userprofile-pod
+    spec:
+      containers:
+      - name: userprofile-pod
+        image: registryygo2491.azurecr.io/userprofile:latest
+        ports:
+        - containerPort: 80

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trips
+  labels:
+    app: trips
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trips-pod
+  template:
+    metadata:
+      labels:
+        app: trips-pod
+    spec:
+      containers:
+      - name: trips-pod
+        image: registryygo2491.azurecr.io/trips:latest
+        ports:
+        - containerPort: 80
