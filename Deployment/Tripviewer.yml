@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: poi
+  name: tripviewer
   labels:
-    app: poi
+    app: tripviewer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: poi-pod
+      app: tripviewer-pod
   template:
     metadata:
       labels:
-        app: poi-pod
+        app: tripviewer-pod
     spec:
       containers:
-      - name: poi-pod
-        image: registryygo2491.azurecr.io/poi:latest
+      - name: tripviewer-pod
+        image: registryygo2491.azurecr.io/tripviewer:latest
         ports:
         - containerPort: 80
