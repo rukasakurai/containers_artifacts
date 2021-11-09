@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: poi
+  name: poi-app
   labels:
-    app: poi
+    app: poi-app
 spec:
   replicas: 1
   selector:
@@ -18,14 +18,23 @@ spec:
       - name: poi-pod
         image: registryygo2491.azurecr.io/poi:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8081
         env: 
         - name: SQL_USER
-          value: "sqladminyGo2491"
+          valueFrom: 
+            secretKeyRef:
+              name: db-secret
+              key: db_user
         - name: SQL_PASSWORD
-          value: "hL2iz6Kd3"
+          valueFrom: 
+            secretKeyRef:
+              name: db-secret
+              key: db_password
         - name: SQL_SERVER
-          value: "sqlserverygo2491.database.azure.net"          
+          valueFrom: 
+            secretKeyRef:
+              name: db-secret
+              key: db_server        
         - name: SQL_DBNAME
           value: "mydrivingDB"    
         - name: WEB_PORT
@@ -47,10 +56,23 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: public-svc
+  name: poi-svc
+spec:
+  selector:
+    app: poi-pod
+  ports:
+    - protocol: TCP
+      port: 8103
+      targetPort: 8081              
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: poi-public-svc
 spec:
   type: LoadBalancer
   ports:
-  - port: 80
+    - port: 8082
+      targetPort: 8081
   selector:
-    app: poi  
+    app: poi-pod  
