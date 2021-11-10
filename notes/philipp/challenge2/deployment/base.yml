@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poi-api
+  labels:
+    app: poi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: poi-pod
+  template:
+    metadata:
+      labels:
+        app: poi-pod
+    spec:
+      containers:
+      - name: poi
+        image: registryygo2491.azurecr.io/poi:latest
+        ports:
+        - containerPort: 8081
+        env: 
+        - name: SQL_USER
+          value: "sqladminyGo2491"
+        - name: SQL_PASSWORD
+          value: "hL2iz6Kd3"
+        - name: SQL_SERVER
+          value: "sql1"          
+        - name: SQL_DBNAME
+          value: "mydrivingDB"    
+        - name: WEB_PORT
+          value: "8081"    
+        - name: WEB_SERVER_BASE_URI
+          value: "http://0.0.0.0" 
+        - name: CONFIG_FILES_PATH
+          value: "/secrets" 
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Development"           
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+          ports:
+          - containerPort: 8081
+            name: poi-port       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: public-svc
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: poi                  

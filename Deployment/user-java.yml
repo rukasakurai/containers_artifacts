@@ -60,3 +60,22 @@ spec:
     - protocol: TCP
       port: 8100
       targetPort: 8080            
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: user-java-ingress
+  namespace: api
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/user-java/*
+        backend:
+          service:
+            name: user-java-svc
+            port:
+              number: 8100
+        pathType: Prefix  
