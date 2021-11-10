@@ -21,9 +21,9 @@ spec:
         - containerPort: 80
         env:
         - name: TRIPS_API_ENDPOINT
-          value: "http://10.0.173.139:8104"    
+          value: "trips-svc.backend"    
         - name: USERPROFILE_API_ENDPOINT
-          value: "http://10.0.248.232:8102"
+          value: "userprofile-svc.backend"
         resources:
           requests:
             cpu: 100m
