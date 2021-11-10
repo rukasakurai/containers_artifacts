@@ -1,1 +1,1 @@
-kubectl create secret generic db-secret --from-file=. --namespace "backend"
+kubectl create secret generic db-secret --from-file=. --namespace "api"
