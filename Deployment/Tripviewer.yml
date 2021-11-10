@@ -4,6 +4,7 @@ metadata:
   name: tripviewer
   labels:
     app: tripviewer
+  namespace: frontend
 spec:
   replicas: 1
   selector:
@@ -19,3 +20,30 @@ spec:
         image: registryygo2491.azurecr.io/tripviewer:latest
         ports:
         - containerPort: 80
+        env:
+        - name: TRIPS_API_ENDPOINT
+          value: "http://10.0.208.13:8104"    
+        - name: USERPROFILE_API_ENDPOINT
+          value: "http://10.0.246.194:8102"
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Development"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tripviewer-public-svc
+  namespace: frontend
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: tripviewer-pod  
