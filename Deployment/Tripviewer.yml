@@ -22,9 +22,9 @@ spec:
         - containerPort: 80
         env:
         - name: TRIPS_API_ENDPOINT
-          value: "http://10.0.208.13:8104"    
+          value: "http://trips-svc.backend.svc.cluster.local:8104"    
         - name: USERPROFILE_API_ENDPOINT
-          value: "http://10.0.246.194:8102"
+          value: "http://userprofile-svc.backend.svc.cluster.local:8102"
         - name: ASPNETCORE_ENVIRONMENT
           value: "Development"
         resources:
