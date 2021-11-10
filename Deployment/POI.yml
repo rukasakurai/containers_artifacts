@@ -4,6 +4,7 @@ metadata:
   name: poi
   labels:
     app: poi
+  namespace: backend
 spec:
   replicas: 1
   selector:
@@ -18,18 +19,27 @@ spec:
       - name: poi-pod
         image: registryygo2491.azurecr.io/poi:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         env: 
         - name: SQL_USER
-          value: "sqladminyGo2491"
+          valueFrom: 
+            secretKeyRef:
+              name: db-secret
+              key: db_user
         - name: SQL_PASSWORD
-          value: "hL2iz6Kd3"
+          valueFrom: 
+            secretKeyRef:
+              name: db-secret
+              key: db_password
         - name: SQL_SERVER
-          value: "sqlserverygo2491.database.azure.net"          
+          valueFrom: 
+            secretKeyRef:
+              name: db-secret
+              key: db_server  
         - name: SQL_DBNAME
           value: "mydrivingDB"    
         - name: WEB_PORT
-          value: "8081"    
+          value: "8080"    
         - name: WEB_SERVER_BASE_URI
           value: "http://0.0.0.0" 
         - name: CONFIG_FILES_PATH
@@ -47,10 +57,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: public-svc
+  name: poi-svc
+  namespace: backend
 spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
   selector:
-    app: poi  
+    app: poi-pod  
+  ports:
+    - protocol: TCP
+      port: 8103
+      targetPort: 8080  

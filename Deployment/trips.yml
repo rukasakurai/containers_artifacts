@@ -4,6 +4,7 @@ metadata:
   name: trips
   labels:
     app: trips
+  namespace: backend
 spec:
   replicas: 1
   selector:
@@ -18,4 +19,54 @@ spec:
       - name: trips-pod
         image: registryygo2491.azurecr.io/trips:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8080
+        env: 
+        - name: SQL_USER
+          valueFrom: 
+            secretKeyRef:
+              name: db-secret
+              key: db_user
+        - name: SQL_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: db-secret
+              key: db_password
+        - name: SQL_SERVER
+          valueFrom: 
+            secretKeyRef:
+              name: db-secret
+              key: db_server        
+        - name: SQL_DBNAME
+          value: "mydrivingDB"    
+        - name: PORT
+          value: "8080"    
+        - name: WEB_SERVER_BASE_URI
+          value: "http://0.0.0.0" 
+        - name: CONFIG_FILES_PATH
+          value: "/secrets" 
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Development"           
+        - name: OPENAPI_DOCS_URI
+          value: "http://changeme"
+        - name: DEBUG_LOGGING
+          value: "false"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trips-svc
+  namespace: backend
+spec:
+  selector:
+    app: trips-pod
+  ports:
+    - protocol: TCP
+      port: 8104
+      targetPort: 8080      
