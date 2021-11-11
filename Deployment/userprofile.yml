@@ -24,6 +24,16 @@ spec:
           readOnly: true
         ports:
         - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /api/user/healthcheck
+            port: 8080
+          timeoutSeconds: 30
+        livenessProbe:
+          httpGet:
+            path: /api/user/healthcheck
+            port: 8080      
+          timeoutSeconds: 30          
         env:        
         - name: SQL_DBNAME
           value: "mydrivingDB"    
