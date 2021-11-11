@@ -20,11 +20,11 @@ spec:
         image: registryygo2491.azurecr.io/poi:latest
         volumeMounts:
         - name: secrets-store01-inline
-          mountPath: "/mnt/secrets-store"
-          readOnly: true        
+          mountPath: "/secrets"
+          readOnly: true 
         ports:
         - containerPort: 8080
-        env: 
+        env:            
         - name: SQL_DBNAME
           value: "mydrivingDB"    
         - name: WEB_PORT

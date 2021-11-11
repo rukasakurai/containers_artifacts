@@ -18,24 +18,13 @@ spec:
       containers:
       - name: trips-pod
         image: registryygo2491.azurecr.io/trips:latest
+        volumeMounts:
+        - name: secrets-store01-inline
+          mountPath: "/secrets"
+          readOnly: true 
         ports:
         - containerPort: 8080
-        env: 
-        - name: SQL_USER
-          valueFrom: 
-            secretKeyRef:
-              name: db-secret
-              key: db_user
-        - name: SQL_PASSWORD
-          valueFrom: 
-            secretKeyRef:
-              name: db-secret
-              key: db_password
-        - name: SQL_SERVER
-          valueFrom: 
-            secretKeyRef:
-              name: db-secret
-              key: db_server        
+        env:       
         - name: SQL_DBNAME
           value: "mydrivingDB"    
         - name: PORT
@@ -57,6 +46,13 @@ spec:
           limits:
             cpu: 250m
             memory: 256Mi
+      volumes:
+        - name: secrets-store01-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "azure-kvname-user-msi"
 ---
 apiVersion: v1
 kind: Service
@@ -82,7 +78,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /api/trops
+      - path: /api/trips/*
         backend:
           service:
             name: trips-svc
