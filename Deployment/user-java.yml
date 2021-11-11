@@ -6,7 +6,7 @@ metadata:
     app: user-java
   namespace: api
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: user-java-pod
@@ -24,6 +24,20 @@ spec:
           readOnly: true 
         ports:
         - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /api/user-java/healthcheck
+            port: 8080
+          timeoutSeconds: 30
+          periodSeconds: 30          
+          initialDelaySeconds: 30
+        # livenessProbe:
+        #   httpGet:
+        #     path: /api/user-java/healthcheck
+        #     port: 8080      
+        #   periodSeconds: 30
+        #   timeoutSeconds: 30     
+        #   initialDelaySeconds: 30          
         env:           
         - name: SQL_DBNAME
           value: "mydrivingDB"    

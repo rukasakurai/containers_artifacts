@@ -2,8 +2,11 @@
 
 - Your team secured your Azure SQL Server connection information such that literal values cannot be inappropriately accessed -- WIP
 - Your team used an external key vault to store and access secrets inside your cluster, and ensured that access does not require a secret stored in the cluster -- WIP
-- Your team ensured that all links on the Trip Viewer site are reachable
-  -- user-java is not working, poi seems broken due to key vault work
+- Your team ensured that all links on the Trip Viewer site are reachable 
+  -- POI > WORKING
+  -- user profile > WORKING
+  -- trips > WORKING
+  -- user-java > BROKEN
 - Your team ensured the simulator can successfully update the values in the application across all services -- TBD
 
 # set up ingress controller

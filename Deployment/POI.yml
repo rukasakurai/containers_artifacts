@@ -6,7 +6,7 @@ metadata:
     app: poi
   namespace: api
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: poi-pod
@@ -24,6 +24,16 @@ spec:
           readOnly: true 
         ports:
         - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /api/poi/healthcheck
+            port: 8080
+          timeoutSeconds: 30
+        livenessProbe:
+          httpGet:
+            path: /api/poi/healthcheck
+            port: 8080      
+          timeoutSeconds: 30
         env:            
         - name: SQL_DBNAME
           value: "mydrivingDB"    
@@ -61,4 +71,23 @@ spec:
   ports:
     - protocol: TCP
       port: 8103
-      targetPort: 8080  
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: poi-ingress
+  namespace: api
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/poi/*
+        backend:
+          service:
+            name: poi-svc
+            port:
+              number: 8103
+        pathType: Prefix  
