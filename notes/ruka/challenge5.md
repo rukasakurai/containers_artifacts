@@ -51,3 +51,6 @@ kubectl exec poi-9478867c-btg7d -n api -- cat /mnt/secrets-store/dbpassword
 kubectl exec poi-9478867c-btg7d -n api -- cat /mnt/secrets-store/dbserver
 kubectl exec poi-9478867c-btg7d -n api -- cat /mnt/secrets-store/dbuser
 ```
+
+# Application Gateway
+https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-add-health-probes
